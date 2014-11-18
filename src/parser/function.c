@@ -21,14 +21,17 @@ unsigned get_until_space(char *str, char **dest)
 return ret;
 }
 
-unsigned handle_args(_func_nfo **target, char *str)
-{ /* Untested */
-	unsigned n = 0, d = 0, rret = 0;
+static unsigned handle_args(_func_nfo **target, char *str)
+{ /* I think this might need more testing */
+	unsigned n = 0, d = 0, rret = 0; /* Real return */
 	_func_nfo *ret = *target; /* Alias the target for uniform code */
 	char *namebuf, *typebuf, **bbuf;
 	while (*str == ' ' || *str == '\n' || *str == '\t' || *str == '(' || *str == ',')
 		str++;
-	/* 
+	if (*str == ')') {
+		return 0;
+	}
+	/* Obsolete. TODO: remove
 	bbuf = (char **) malloc(1 * sizeof(char *));
 	d = get_until_space(str, bbuf);
 	typebuf = *bbuf;
@@ -111,17 +114,24 @@ _func_nfo *parse_function(char **target)
 		++n;
 		++str;
 	}
-	while (*str == ' ')
+
+	do {
 		--str;
+		--n;
+	} while (*str == ' ' || *str == '\t' || *str == '\n');
+
 	while (*str != ' ' && *str != '*' && *str != '&') {
 		--str;
 		--n;
 	}
 
-	namebuf = (char *) malloc ((n + 2) * sizeof(char));
-	strncpy(namebuf, str - n, (size_t) n+1);
+	++str;
+	++n;
+
+	namebuf = (char *) malloc ((n + 1) * sizeof(char));
+	strncpy(namebuf, str - n, (size_t) n);
 	strcat(namebuf, "\0");
-	set_ret_t_func_nfo(ret, namebuf, d + n + 1);
+	set_ret_t_func_nfo(ret, namebuf, d + n);
 	free(namebuf);
 	bbuf = (char **) malloc(1 * sizeof(char *)); /* Reusing namebuf for the function's name to store */
 	d = get_until_space(str, bbuf);
@@ -137,17 +147,19 @@ _func_nfo *parse_function(char **target)
 return ret;
 }
 
-/*
+#if 0
 int main(int argc, const char *argv[]) {
 	char buf[] = "asd ***&asd(asd asd)";
 	char *buff = (char *) buf;
 	_func_nfo *ret = parse_function(&buff);
 	fprintf(stderr, "%s %s (%s %s) f?\n", ret->ret_t, ret->name, *(ret->arg_type), *(ret->args));
-	char test2[] = "FU_f_-CK *_GH_0as       \t(aaa a asd, a *asd) ";
+	destroy_func_nfo(ret);
+	char test2[] = "asd ffdf()";
 	buff = (char *) test2;
 	ret = parse_function(&buff);
-	fprintf(stderr, "%s %s (%s %s) %d\n", ret->ret_t, ret->name, *(ret->arg_type), *(ret->args), ret->arg_len);
+	fprintf(stderr, "Ret_t: `%s` name: `%s` (%s %s) %d\n", ret->ret_t, ret->name, *(ret->arg_type), *(ret->args), ret->arg_len);
+	fprintf(stderr, "Name: `%s'\n", ret->name);
+	destroy_func_nfo(ret);
 return 0;
 }
-*/
-
+#endif

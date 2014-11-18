@@ -24,10 +24,10 @@ typedef struct _method_nfo _method_nfo;
 typedef struct _func_nfo _func_nfo;
 typedef struct _template _template;
 
-#include "_class.h"
-#include "_method_nfo.h"
-#include "_func_nfo.h"
-#include "_template.h"
+#include "class/_class.h"
+#include "method_nfo/_method_nfo.h"
+#include "func_nfo/_func_nfo.h"
+#include "template/_template.h"
 
 /* exec.c: */
 	int exec(char *); /* returns exit value of child process */

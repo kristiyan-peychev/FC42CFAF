@@ -7,7 +7,6 @@
 
 /* function.c */
 unsigned get_until_space(char *, char **); /* Don't use this, please. */
-unsigned handle_args(_func_nfo *, char *); /* Used by parse_function */
 _func_nfo *parse_function(char **); 	/* The argument must be preallocated, */
 /* simply an address will trigger a segfault. This will modify the first pointer */
 /* in the argument such that it starts exactly after the closing parentheses of */
