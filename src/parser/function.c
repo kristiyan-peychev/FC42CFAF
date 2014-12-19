@@ -30,7 +30,8 @@ unsigned handle_args(_func_nfo **target, char *str)
 	_func_nfo *ret = *target; // Alias the target for uniform code
 	char *namebuf, *typebuf, **bbuf;
 
-	while (*str == ' ' || *str == '\n' || *str == '\t' || *str == '(' || *str == ',')
+	while (*str == ' ' || *str == '\n' || *str == '\t' ||
+			*str == '(' || *str == ',')
 		str++;
 
 	while (*str != ',' && *str != ')') {
